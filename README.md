@@ -1,4 +1,4 @@
-# CE-RISE DPP Record Metadata
+# DPP Record Metadata
 
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dpp-record-metadata/)
 
@@ -22,13 +22,20 @@ This data model provides a universal metadata framework for declaring the compos
 
 ```
 DPPRecordMetadata (root)
-├── AppliedSchemas (PRIMARY, multivalued)
+├── AppliedSchemas (multivalued)
 │   ├── SchemaReference
 │   │   ├── SchemaURL (or identifier)
 │   │   ├── SchemaType (CE-RISE, GS1, Schema.org, custom, etc.)
+│   │   ├── SchemaLanguage (LinkML, JSON-Schema, XSD, SHACL, etc.)
 │   │   ├── Version
+│   │   ├── SchemaHash (checksum for integrity)
 │   │   ├── Namespace/Prefix
 │   │   └── SequenceOrder
+│   ├── SchemaUsage
+│   │   ├── SchemaRole (core-identity, sustainability, compliance, etc.)
+│   │   ├── SchemaProfile (subset or profile used)
+│   │   ├── DataCompleteness (full, partial, minimal)
+│   │   └── FallbackSchema (alternative if primary not recognized)
 │   └── CompositionMethod (sequential, nested, mixed)
 │
 └── MetadataVersion
@@ -39,12 +46,28 @@ DPPRecordMetadata (root)
 ### Workflow Sequence
 
 #### **Step 1: Applied Schemas Declaration**
-Primary metadata declaring which schemas/models compose this DPP record:
+Core metadata declaring which schemas/models compose this DPP record:
 - **SchemaReference**: Reference to any data model (CE-RISE, GS1, Schema.org, industry-specific, etc.)
 - **SchemaType**: Classification to help processors understand the schema origin
+- **SchemaLanguage**: Technical format (LinkML, JSON-Schema, XSD, SHACL, RDF-Schema)
 - **Version**: Specific version for proper interpretation
+- **SchemaHash**: Checksum for verifying schema integrity over time
 - **SequenceOrder**: Order in which schema data appears in the composite record
 - **CompositionMethod**: How the schemas are combined (sequential blocks, nested, or mixed)
+
+#### **Step 2: Schema Usage Context**
+Additional metadata about how each schema is used:
+- **SchemaRole**: Purpose of this schema in the DPP (core-identity, sustainability-data, regulatory-compliance, usage-tracking)
+- **SchemaProfile**: Specific profile or subset if using partial schema
+- **DataCompleteness**: Whether schema is fully, partially, or minimally populated
+- **FallbackSchema**: Alternative schema reference for graceful degradation
+
+#### **Step 3: Metadata Versioning**
+Version information for the metadata structure itself:
+- **MetadataSchemaVersion**: Version of this DPP Record Metadata schema structure
+- **CompatibilityLevel**: Backward/forward compatibility declaration (e.g., "compatible-with: 1.x")
+- Enables evolution of the metadata format without breaking existing parsers
+- Allows consumers to determine if they can process this metadata version
 
 Examples of supported schemas:
 - CE-RISE models (product-profile v1.0, usage-and-maintenance v1.0)
@@ -74,8 +97,12 @@ Every data point in the model includes a `sql_identifier` annotation that serves
 **Examples:**
 - `dpm_schema_reference_url` - URL or identifier of an applied schema
 - `dpm_schema_type` - Type classification (CE-RISE, GS1, custom, etc.)
+- `dpm_schema_language` - Technical format (LinkML, JSON-Schema, etc.)
 - `dpm_schema_version` - Version of an applied schema
+- `dpm_schema_hash` - Integrity checksum of schema
 - `dpm_schema_order` - Sequence position in composite record
+- `dpm_schema_role` - Purpose of schema in DPP
+- `dpm_schema_completeness` - Data coverage level
 - `dpm_metadata_version` - Version of this metadata schema
 
 This identifier system enables the metadata to be stored alongside product data without naming conflicts.
@@ -86,8 +113,9 @@ This identifier system enables the metadata to be stored alongside product data 
 
 | Step | Component | Sub-Components | Criticalities Identified | Solutions Planned | Status | Missing/TODO |
 |------|-----------|---------------|-------------------------|-------------------|--------|--------------|
-| **1** | **Applied Schemas<br>(Core Metadata)** | • SchemaReference<br>• SchemaType classifier<br>• Version tracking<br>• SequenceOrder<br>• CompositionMethod | • Support any schema type<br>• Handle diverse versioning schemes<br>• Order matters for parsing<br>• Namespace conflicts<br>• Schema resolution | • Generic reference structure<br>• Type taxonomy<br>• Flexible version field<br>• Explicit sequencing<br>• Namespace isolation | **PLANNED** | • Schema registry integration<br>• Auto-discovery<br>• Compatibility checks<br>• Schema negotiation |
-| **2** | **Metadata Versioning** | • MetadataSchemaVersion<br>• CompatibilityLevel | • Metadata schema evolution<br>• Backward compatibility<br>• Migration paths | • Semantic versioning<br>• Compatibility declaration<br>• Version detection | **PLANNED** | • Auto-migration<br>• Version negotiation |
+| **1** | **Schema References<br>(Core Metadata)** | • SchemaReference<br>• SchemaType classifier<br>• SchemaLanguage<br>• Version tracking<br>• SchemaHash<br>• SequenceOrder<br>• CompositionMethod | • Support any schema type<br>• Handle diverse versioning schemes<br>• Schema integrity verification<br>• Parser selection<br>• Order matters for parsing<br>• Namespace conflicts | • Generic reference structure<br>• Type taxonomy<br>• Language identification<br>• Hash/checksum validation<br>• Explicit sequencing<br>• Namespace isolation | **PLANNED** | • Schema registry integration<br>• Auto-discovery<br>• Hash verification tools<br>• Parser routing |
+| **2** | **Schema Usage<br>(Context Metadata)** | • SchemaRole<br>• SchemaProfile<br>• DataCompleteness<br>• FallbackSchema | • Purpose classification<br>• Partial schema usage<br>• Completeness indicators<br>• Graceful degradation<br>• Profile management | • Role taxonomy<br>• Profile referencing<br>• Completeness metrics<br>• Fallback chains<br>• Usage patterns | **PLANNED** | • Role standardization<br>• Profile validation<br>• Coverage analysis<br>• Fallback testing |
+| **3** | **Metadata Versioning** | • MetadataSchemaVersion<br>• CompatibilityLevel | • Metadata schema evolution<br>• Backward compatibility<br>• Migration paths | • Semantic versioning<br>• Compatibility declaration<br>• Version detection | **PLANNED** | • Auto-migration<br>• Version negotiation |
 
 ### Integration Opportunities
 
