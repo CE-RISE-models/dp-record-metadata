@@ -1,6 +1,6 @@
 # CE-RISE DPP Record Metadata
 
-[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dpp-record-metadata/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17880431.svg)](https://doi.org/10.5281/zenodo.17880431) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dpp-record-metadata/)
 
 Repository for the CE-RISE DPP Record Metadata data model, part of the DPP Metadata Layer in the Digital Product Passport architecture. This model provides a universal metadata envelope that declares which data models and schemas compose a DPP record, regardless of their origin. It supports any combination of CE-RISE models, industry standards, proprietary schemas, or established ontologies, enabling true interoperability. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DPP record, promoting an open and extensible ecosystem rather than a closed system.
 
