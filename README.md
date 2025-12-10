@@ -1,80 +1,105 @@
-# CE-RISE Data Model Template
+# CE-RISE DPP Record Metadata
 
-[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/<repo-name>/)
+[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED) [![Schemas](https://img.shields.io/badge/Generated%20Schema%20Files-JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dpp-record-metadata/)
 
-This repository provides the **official template** for creating CE-RISE data models.  
-It defines the standard structure, tooling, and workflow used across all model projects.
+Repository for the CE-RISE DPP Record Metadata data model, part of the DPP Metadata Layer in the Digital Product Passport architecture. This model provides a universal metadata envelope that declares which data models and schemas compose a DPP record, regardless of their origin. It supports any combination of CE-RISE models, industry standards, proprietary schemas, or established ontologies, enabling true interoperability. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DPP record, promoting an open and extensible ecosystem rather than a closed system.
 
 
 ---
 
 ## Data Model Structure
-Put here description of data model structure.
+This data model provides a universal metadata framework for declaring the composition of any DPP record. It supports heterogeneous data sources by allowing references to any schema or ontology - whether CE-RISE models, GS1 standards, Schema.org types, industry-specific schemas, or proprietary formats. The metadata declares which models are used and in what sequence, enabling parsers to correctly interpret composite records built from diverse sources.
 
 ### Key Design Principles
-
+1. **Schema-agnostic**: Supports any data model, ontology, or schema - not limited to CE-RISE
+2. **Models-first approach**: The list of applied schemas is the primary and often only required metadata
+3. **Composite record support**: Enables combination of heterogeneous data sources in a defined sequence
+4. **Version awareness**: Tracks schema versions for proper interpretation
+5. **Minimal overhead**: Thin metadata layer that doesn't duplicate what's already in the referenced schemas
+6. **Open ecosystem**: Promotes interoperability by accepting any standard or proprietary format
 
 ### Core Hierarchy
 
 ```
-JustAnExample (root)
-├── 1. GeneralProductInformation
-│   ├── LotBatchNumber
-│   ├── GTIN14
-│   ├── SerialNumber
-│   ├── ProductImages
-│   ├── ProductType
-│   └── UniqueProductIdentifier
-
+DPPRecordMetadata (root)
+├── AppliedSchemas (PRIMARY, multivalued)
+│   ├── SchemaReference
+│   │   ├── SchemaURL (or identifier)
+│   │   ├── SchemaType (CE-RISE, GS1, Schema.org, custom, etc.)
+│   │   ├── Version
+│   │   ├── Namespace/Prefix
+│   │   └── SequenceOrder
+│   └── CompositionMethod (sequential, nested, mixed)
+│
+└── MetadataVersion
+    ├── SchemaVersion (version of this metadata schema)
+    └── CompatibilityLevel
 ```
 
 ### Workflow Sequence
 
-#### **Step 1: Just another example** 
-Basic product identification with multiple identifier types:
-- **LotBatchNumber**: Lot/batch tracking information
-- **GTIN14**: Global Trade Item Number (14-digit format with GS1 integration)
-- **SerialNumber**: Individual product serial numbers
-- **ProductImages**: Product images for branding/visual identification (comma-separated URLs)
-- **ProductType**: Product classification (3-digit GTIN prefix or alphanumeric code)
-- **UniqueProductIdentifier**: Enables web link to product passport
+#### **Step 1: Applied Schemas Declaration**
+Primary metadata declaring which schemas/models compose this DPP record:
+- **SchemaReference**: Reference to any data model (CE-RISE, GS1, Schema.org, industry-specific, etc.)
+- **SchemaType**: Classification to help processors understand the schema origin
+- **Version**: Specific version for proper interpretation
+- **SequenceOrder**: Order in which schema data appears in the composite record
+- **CompositionMethod**: How the schemas are combined (sequential blocks, nested, or mixed)
+
+Examples of supported schemas:
+- CE-RISE models (product-profile v1.0, usage-and-maintenance v1.0)
+- GS1 EPCIS events
+- Schema.org Product types
+- Industry standards (IEC 61360, ISO 14040 series)
+- Proprietary company schemas
+- National/regional standards
 
 ### Data Properties
 
-Each class has a corresponding value property (e.g., `name_value`, `company_id_value`) that holds the actual data. All value properties are string type except where specified otherwise.
+The metadata is intentionally minimal - it declares what schemas are used without duplicating their content. Each referenced schema brings its own validation rules, ontology bindings, and semantic definitions.
 
 #### SQL Identifiers
 
 Every data point in the model includes a `sql_identifier` annotation that serves as a unique, machine-friendly database identifier. These identifiers follow a structured namespace pattern to ensure uniqueness across the entire data model:
 
-**Pattern**: `MODEL_[category]_[specific_name]`
+**Pattern**: `dpm_[category]_[specific_name]`
 
 **Features:**
-- **Product Profile Prefix**: All identifiers start, for instance, with `pro_` to clearly identify them as belonging to the Product Profile data model
-- **Hierarchical Namespacing**: Uses category prefixes (`gen_info_`, `mfr_info_`, `imp_info_`, `spec_info_`) to provide context and prevent naming conflicts
+- **DPP Metadata Prefix**: All identifiers start with `dpm_` to clearly identify them as DPP Record Metadata
+- **Hierarchical Namespacing**: Uses category prefixes (`schema_`, `version_`)
 - **Database-Friendly**: Uses underscores and avoids special characters for SQL compatibility
-- **Unique Across Model**: No duplicate identifiers, even when similar concepts appear in different parts of the hierarchy
-- **Reasonable Length**: Abbreviated but meaningful names that balance clarity with practical database usage
+- **Unique Across Model**: No duplicate identifiers within the metadata model
+- **Metadata-specific**: Designed to coexist with product data identifiers from other models
 
 **Examples:**
-- `pro_gen_info_gtin14` - GTIN-14 identifier in General Product Information
-- `pro_mfr_info_facility` - Manufacturing facility in Manufacturer Information  
-- `pro_imp_info_eori` - EORI number in Import/Export Information
-- `pro_spec_info_materials` - Material composition in Product Specifications
+- `dpm_schema_reference_url` - URL or identifier of an applied schema
+- `dpm_schema_type` - Type classification (CE-RISE, GS1, custom, etc.)
+- `dpm_schema_version` - Version of an applied schema
+- `dpm_schema_order` - Sequence position in composite record
+- `dpm_metadata_version` - Version of this metadata schema
 
-This identifier system enables seamless integration with databases and ensures clear data model composition when combining with other CE-RISE data models.
+This identifier system enables the metadata to be stored alongside product data without naming conflicts.
 
 ---
 
 ## Development Roadmap
 
-| Step | Component | Criticalities Identified | Solutions Implemented | Status | Missing/TODO |
-|------|-----------|-------------------------|----------------------|--------|--------------|
-| **1** | **ExampleExampleExample** | • Unique product identifier lacks precision and standards<br>• No reference integration with discoverability/registries<br>• Missing serial number and lot number storage<br>• No connection to standard product nomenclature<br>• No product description and branding<br>• No classification for grouping products | • Added GS1 prefix and ontology integration<br>• Implemented GTIN-14 + serial number approach<br>• Added Schema.org prefix<br>• Created GTIN-14, Serial number, Lot/batch number subclasses<br>• Added ProductImages (comma-separated image URLs with format validation)<br>• Added ProductType (3-digit GTIN prefix or alphanumeric classification)<br>• Referenced UNTP framework for discoverability | **COMPLETED** | • UNTP Identity Resolver integration 
+| Step | Component | Sub-Components | Criticalities Identified | Solutions Planned | Status | Missing/TODO |
+|------|-----------|---------------|-------------------------|-------------------|--------|--------------|
+| **1** | **Applied Schemas<br>(Core Metadata)** | • SchemaReference<br>• SchemaType classifier<br>• Version tracking<br>• SequenceOrder<br>• CompositionMethod | • Support any schema type<br>• Handle diverse versioning schemes<br>• Order matters for parsing<br>• Namespace conflicts<br>• Schema resolution | • Generic reference structure<br>• Type taxonomy<br>• Flexible version field<br>• Explicit sequencing<br>• Namespace isolation | **PLANNED** | • Schema registry integration<br>• Auto-discovery<br>• Compatibility checks<br>• Schema negotiation |
+| **2** | **Metadata Versioning** | • MetadataSchemaVersion<br>• CompatibilityLevel | • Metadata schema evolution<br>• Backward compatibility<br>• Migration paths | • Semantic versioning<br>• Compatibility declaration<br>• Version detection | **PLANNED** | • Auto-migration<br>• Version negotiation |
 
 ### Integration Opportunities
 
-
+- **W3C DCAT** - Data Catalog Vocabulary for dataset metadata
+- **Schema.org Dataset** - For dataset-level metadata structures
+- **DCMI Terms** - Dublin Core for basic metadata elements
+- **VOID** - Vocabulary of Interlinked Datasets
+- **JSON-LD** - For @context declarations when using multiple schemas
+- **OpenAPI/AsyncAPI** - For API schema references
+- **GS1 Web Vocabulary** - For GS1 schema references
+- **ISO 15836** - Dublin Core Metadata Element Set
+- **LinkML** - For schema definitions
 
 ---
 
@@ -83,7 +108,7 @@ This identifier system enables seamless integration with databases and ensures c
 Release artifacts for each version (`schema.json`, `shacl.ttl`, `model.owl`)  
 are served directly from this URL:
 ```
-https://ce-rise-models.codeberg.page/<repo-name>/
+https://ce-rise-models.codeberg.page/dpp-record-metadata/
 ```
 
 
@@ -94,7 +119,7 @@ https://ce-rise-models.codeberg.page/<repo-name>/
 If you want to view the files published for version `v1.2.0`, open:
 
 ```
-https://codeberg.org/CE-RISE-models/<repo-name>/src/tag/pages-v1.2.0/generated/
+https://codeberg.org/CE-RISE-models/dpp-record-metadata/src/tag/pages-v1.2.0/generated/
 ```
 
 Files available in that directory typically include:
@@ -122,7 +147,4 @@ Attribution: CE-RISE project (Grant Agreement No. 101092281) and the individual 
   <img src="https://nilu.no/wp-content/uploads/2023/12/nilu-logo-seagreen-rgb-300px.png" alt="NILU logo" width="40"/>
 </a>
 
-Developed by NILU (Riccardo Boero — ribo@nilu.no) within the CE-RISE project.  
-
-
-
+Developed by NILU (Riccardo Boero — ribo@nilu.no) within the CE-RISE project.
