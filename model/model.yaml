@@ -40,6 +40,11 @@ classes:
                 description: "List of schemas/models that compose this DPP record"
                 annotations:
                     sql_identifier: dpm_applied_schemas
+            metadata_versioning:
+                range: MetadataVersioning
+                description: "Version information for the metadata structure itself"
+                annotations:
+                    sql_identifier: dpm_metadata_versioning
 
     # Step 1: Schema References (Core Metadata)
 
@@ -206,3 +211,58 @@ classes:
                 annotations:
                     sql_identifier: dpm_dependency_schemas
                     owl.filler: dpm:dependency_schemas_value
+
+    # Step 3: Metadata Versioning (Meta-metadata)
+
+    MetadataVersioning:
+        description: "Version information for the DPP Record Metadata structure itself"
+        class_uri: void:Dataset
+        attributes:
+            metadata_schema_version:
+                range: string
+                description: "Version of this DPP Record Metadata schema structure"
+                slot_uri: pav:version
+                annotations:
+                    sql_identifier: dpm_metadata_schema_version
+                    owl.filler: dpm:metadata_schema_version_value
+            compatibility_level:
+                range: string
+                description: "Backward/forward compatibility declaration (e.g., compatible-with: 1.x)"
+                slot_uri: pav:compatibleWith
+                annotations:
+                    sql_identifier: dpm_compatibility_level
+                    owl.filler: dpm:compatibility_level_value
+            metadata_created:
+                range: datetime
+                description: "Timestamp when this metadata record was created"
+                slot_uri: dcterms:created
+                annotations:
+                    sql_identifier: dpm_metadata_created
+                    owl.filler: dpm:metadata_created_value
+            metadata_modified:
+                range: datetime
+                description: "Timestamp when this metadata record was last modified"
+                slot_uri: dcterms:modified
+                annotations:
+                    sql_identifier: dpm_metadata_modified
+                    owl.filler: dpm:metadata_modified_value
+            metadata_schema_url:
+                range: uri
+                description: "URL to the schema defining this metadata structure"
+                slot_uri: void:inDataset
+                annotations:
+                    sql_identifier: dpm_metadata_schema_url
+                    owl.filler: dpm:metadata_schema_url_value
+            minimum_parser_version:
+                range: string
+                description: "Minimum parser version required to process this metadata"
+                annotations:
+                    sql_identifier: dpm_minimum_parser_version
+                    owl.filler: dpm:minimum_parser_version_value
+            metadata_language:
+                range: string
+                description: "Language of descriptive text in metadata (ISO 639-1 code)"
+                slot_uri: dcterms:language
+                annotations:
+                    sql_identifier: dpm_metadata_language
+                    owl.filler: dpm:metadata_language_value
