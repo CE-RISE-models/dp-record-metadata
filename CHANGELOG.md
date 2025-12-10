@@ -1,10 +1,31 @@
 # Changelog
 
-All notable changes to the CE-RISE RE-XXX Data Model will be documented in this file.
+All notable changes to the CE-RISE DPP Record Metadata Data Model will be documented in this file.
 
-## [0.0.1] - unreleased
+## [0.0.1] - 2025-12-10
 
 ### Added
-- Initial project structure and repository setup from template: https://ce-rise-models.codeberg.page/template-data-model/
-- Initial data model structure for XXXX
-- Artifacts built and deployed to pages
+- Initial implementation of DPP Record Metadata model for universal schema composition
+- **Schema References**: Support for any schema type (CE-RISE, GS1, Schema.org, ISO, proprietary)
+  - Dual reference system (URL or alternative identifier)
+  - Schema type and language classification
+  - Cryptographic hash verification with algorithm specification
+  - Namespace management and documentation links
+- **Schema Usage Context**: Metadata about how schemas are applied
+  - Role classification (core-identity, sustainability-data, regulatory-compliance, etc.)
+  - Profile and subset support
+  - Dual completeness indicators (categorical and percentage)
+  - Fallback schema references for graceful degradation
+- **Composition Information**: How schemas fit in composite records
+  - Sequence ordering for parsing
+  - Composition methods (sequential, nested, mixed, overlay)
+  - Data location pointers (JSONPath, XPath)
+  - Dependency tracking
+- **Metadata Versioning**: Version management for the metadata itself
+  - Semantic versioning with compatibility levels
+  - Lifecycle timestamps (created, modified)
+  - Minimum parser version requirements
+  - Language support (ISO 639-1)
+- No required fields - fully flexible schema
+- SQL identifiers with `dpm_` prefix for database integration
+- Designed for open ecosystem - not limited to CE-RISE schemas

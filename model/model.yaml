@@ -6,7 +6,7 @@ description: >
     data models and schemas compose a DPP record, regardless of their origin. Supports
     any combination of CE-RISE models, industry standards, or proprietary schemas.
 license: CC BY-NC 4.0
-version: 0.1.0
+version: 0.0.1
 
 prefixes:
     linkml: https://w3id.org/linkml/
