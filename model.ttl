@@ -1,0 +1,697 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dpm: <https://ce-rise-models.codeberg.page/dp-record-metadata/> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/.owl.ttl> a owl:Ontology ;
+    rdfs:label "dp-record-metadata" ;
+    dcterms:license "CC BY-NC 4.0" ;
+    dcterms:title "CE-RISE DMP & DPP Record Metadata Data Model" ;
+    pav:version "0.0.2" ;
+    skos:definition """Universal metadata envelope for Digital Material and Product Passport records that declares which data models and schemas compose a DMP/DPP record, regardless of their origin. Supports any combination of CE-RISE models, industry standards, or proprietary schemas.
+""" .
+
+dpm:DPRecordMetadata a owl:Class ;
+    rdfs:label "DPRecordMetadata" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_versioning ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:record_scope ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:AppliedSchema ;
+            owl:onProperty dpm:applied_schemas ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:RecordScopeEnum ;
+            owl:onProperty dpm:record_scope ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:applied_schemas ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:MetadataVersioning ;
+            owl:onProperty dpm:metadata_versioning ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:RelatedPassport ;
+            owl:onProperty dpm:related_passports ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:related_passports ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_versioning ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:record_scope ] ;
+    skos:definition "Root class for DMP & DPP Record Metadata model" ;
+    skos:inScheme dpm: .
+
+dpm:AppliedSchema a owl:Class ;
+    rdfs:label "AppliedSchema" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom dpm:SchemaUsage ;
+            owl:onProperty dpm:schema_usage ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:composition_info ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_reference ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:CompositionInfo ;
+            owl:onProperty dpm:composition_info ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_reference ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:composition_info ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_usage ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_usage ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:SchemaReference ;
+            owl:onProperty dpm:schema_reference ] ;
+    skos:definition "Reference to a schema or data model used in the DMP/DPP record" ;
+    skos:inScheme dpm: .
+
+dpm:CompositionInfo a owl:Class ;
+    rdfs:label "CompositionInfo" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:integer ;
+            owl:onProperty dpm:sequence_order ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:dependency_schemas ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:parent_schema ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:composition_method ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:composition_method ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:parent_schema ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:dependency_schemas ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:data_location ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:parent_schema ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:dependency_schemas ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:data_location ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:composition_method ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:sequence_order ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:data_location ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:sequence_order ] ;
+    skos:definition "Information about how a schema fits within the composite DMP/DPP record" ;
+    skos:inScheme dpm: .
+
+dpm:MetadataVersioning a owl:Class ;
+    rdfs:label "MetadataVersioning" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:compatibility_level ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_schema_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:compatibility_level ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty dpm:metadata_modified ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty dpm:metadata_schema_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_schema_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:minimum_parser_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:metadata_language ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_created ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty dpm:metadata_created ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_schema_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_language ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_language ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:minimum_parser_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_schema_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:metadata_schema_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:compatibility_level ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:minimum_parser_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_modified ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:metadata_created ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:metadata_modified ] ;
+    skos:definition "Version information for the DMP & DPP Record Metadata structure itself" ;
+    skos:exactMatch void:Dataset ;
+    skos:inScheme dpm: .
+
+dpm:RelatedPassport a owl:Class ;
+    rdfs:label "RelatedPassport" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:operation_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:related_passport_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:related_passport_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:relation_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:operation_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom dpm:PassportRelationTypeEnum ;
+            owl:onProperty dpm:relation_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty dpm:related_passport_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:relation_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:operation_ref ] ;
+    skos:definition "Link to another passport record, optionally tied to a traceability or life-cycle event" ;
+    skos:inScheme dpm: .
+
+dpm:SchemaReference a owl:Class ;
+    rdfs:label "SchemaReference" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_identifier ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty dpm:documentation_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_namespace ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_namespace ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_language ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_hash ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_identifier ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_language ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_namespace ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:hash_algorithm ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:hash_algorithm ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:documentation_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_language ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:documentation_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:hash_algorithm ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_hash ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_identifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_hash ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty dpm:schema_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_url ] ;
+    skos:definition "Core identification and reference information for a schema" ;
+    skos:exactMatch dcat:Resource ;
+    skos:inScheme dpm: .
+
+dpm:SchemaUsage a owl:Class ;
+    rdfs:label "SchemaUsage" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:completeness_percentage ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_notes ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:float ;
+            owl:onProperty dpm:completeness_percentage ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:fallback_schema_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_profile ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_profile ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:data_completeness ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty dpm:fallback_schema_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:completeness_percentage ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:schema_notes ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_notes ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:data_completeness ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:data_completeness ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty dpm:schema_profile ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty dpm:fallback_schema_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dpm:schema_role ] ;
+    skos:definition "Context about how a schema is used in the DMP/DPP record" ;
+    skos:inScheme dpm: .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#contributes_to> a owl:Class ;
+    rdfs:label "contributes_to" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record contributes to the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#derived_from> a owl:Class ;
+    rdfs:label "derived_from" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record derives from the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#manufactured_from> a owl:Class ;
+    rdfs:label "manufactured_from" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record is manufactured from the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#merged_into> a owl:Class ;
+    rdfs:label "merged_into" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record is merged into the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#recycled_into> a owl:Class ;
+    rdfs:label "recycled_into" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record is recycled into the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#split_from> a owl:Class ;
+    rdfs:label "split_from" ;
+    rdfs:subClassOf dpm:PassportRelationTypeEnum ;
+    skos:definition "This record is a split from the related passport" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#material> a owl:Class ;
+    rdfs:label "material" ;
+    rdfs:subClassOf dpm:RecordScopeEnum ;
+    skos:definition "Material-level record" .
+
+<https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#product> a owl:Class ;
+    rdfs:label "product" ;
+    rdfs:subClassOf dpm:RecordScopeEnum ;
+    skos:definition "Product-level record" .
+
+dpm:applied_schemas a owl:ObjectProperty ;
+    rdfs:label "applied_schemas" ;
+    skos:definition "List of schemas/models that compose this DMP/DPP record" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_applied_schemas" .
+
+dpm:related_passports a owl:ObjectProperty ;
+    rdfs:label "related_passports" ;
+    skos:definition "Links to related passport records with optional operation references" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_related_passports" .
+
+dpm:RecordScopeEnum a owl:Class ;
+    rdfs:label "RecordScopeEnum" ;
+    owl:unionOf ( <https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#product> <https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#material> ) ;
+    skos:definition "Whether the record is about a product or a material" ;
+    skos:inScheme dpm: ;
+    linkml:permissible_values <https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#material>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/RecordScopeEnum#product> .
+
+dpm:compatibility_level a owl:DatatypeProperty ;
+    rdfs:label "compatibility_level" ;
+    skos:definition "Backward/forward compatibility declaration (e.g., compatible-with: 1.x)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:compatibility_level_value" ;
+    dpm:sql_identifier "dpm_compatibility_level" .
+
+dpm:completeness_percentage a owl:DatatypeProperty ;
+    rdfs:label "completeness_percentage" ;
+    skos:definition "Percentage of schema fields that contain data (0-100)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:completeness_percentage_value" ;
+    dpm:sql_identifier "dpm_completeness_percentage" .
+
+dpm:composition_info a owl:ObjectProperty ;
+    rdfs:label "composition_info" ;
+    skos:definition "Information about how this schema fits in the composite record" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_composition_info" .
+
+dpm:composition_method a owl:DatatypeProperty ;
+    rdfs:label "composition_method" ;
+    skos:definition "How this schema's data is integrated (sequential, nested, mixed, overlay)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:composition_method_value" ;
+    dpm:sql_identifier "dpm_composition_method" .
+
+dpm:data_completeness a owl:DatatypeProperty ;
+    rdfs:label "data_completeness" ;
+    skos:definition "Level of data completeness for this schema (full, partial, minimal)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:data_completeness_value" ;
+    dpm:sql_identifier "dpm_data_completeness" .
+
+dpm:data_location a owl:DatatypeProperty ;
+    rdfs:label "data_location" ;
+    skos:definition "JSONPath, XPath, or other pointer to where this schema's data resides" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:data_location_value" ;
+    dpm:sql_identifier "dpm_data_location" .
+
+dpm:dependency_schemas a owl:DatatypeProperty ;
+    rdfs:label "dependency_schemas" ;
+    skos:definition "List of other schemas this one depends on (comma-separated)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:dependency_schemas_value" ;
+    dpm:sql_identifier "dpm_dependency_schemas" .
+
+dpm:documentation_url a owl:DatatypeProperty ;
+    rdfs:label "documentation_url" ;
+    skos:definition "URL to human-readable documentation for this schema" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_documentation_url_value" ;
+    dpm:sql_identifier "dpm_schema_documentation_url" .
+
+dpm:fallback_schema_url a owl:DatatypeProperty ;
+    rdfs:label "fallback_schema_url" ;
+    skos:definition "Alternative schema to use if primary is not recognized" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:fallback_schema_url_value" ;
+    dpm:sql_identifier "dpm_fallback_schema_url" .
+
+dpm:hash_algorithm a owl:DatatypeProperty ;
+    rdfs:label "hash_algorithm" ;
+    skos:definition "Algorithm used for hash (SHA-256, SHA-512, MD5, etc.)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_hash_algorithm_value" ;
+    dpm:sql_identifier "dpm_schema_hash_algorithm" .
+
+dpm:metadata_created a owl:DatatypeProperty ;
+    rdfs:label "metadata_created" ;
+    skos:definition "Timestamp when this metadata record was created" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:metadata_created_value" ;
+    dpm:sql_identifier "dpm_metadata_created" .
+
+dpm:metadata_language a owl:DatatypeProperty ;
+    rdfs:label "metadata_language" ;
+    skos:definition "Language of descriptive text in metadata (ISO 639-1 code)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:metadata_language_value" ;
+    dpm:sql_identifier "dpm_metadata_language" .
+
+dpm:metadata_modified a owl:DatatypeProperty ;
+    rdfs:label "metadata_modified" ;
+    skos:definition "Timestamp when this metadata record was last modified" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:metadata_modified_value" ;
+    dpm:sql_identifier "dpm_metadata_modified" .
+
+dpm:metadata_schema_url a owl:DatatypeProperty ;
+    rdfs:label "metadata_schema_url" ;
+    skos:definition "URL to the schema defining this metadata structure" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:metadata_schema_url_value" ;
+    dpm:sql_identifier "dpm_metadata_schema_url" .
+
+dpm:metadata_schema_version a owl:DatatypeProperty ;
+    rdfs:label "metadata_schema_version" ;
+    skos:definition "Version of this DMP & DPP Record Metadata schema structure" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:metadata_schema_version_value" ;
+    dpm:sql_identifier "dpm_metadata_schema_version" .
+
+dpm:metadata_versioning a owl:ObjectProperty ;
+    rdfs:label "metadata_versioning" ;
+    skos:definition "Version information for the metadata structure itself" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_metadata_versioning" .
+
+dpm:minimum_parser_version a owl:DatatypeProperty ;
+    rdfs:label "minimum_parser_version" ;
+    skos:definition "Minimum parser version required to process this metadata" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:minimum_parser_version_value" ;
+    dpm:sql_identifier "dpm_minimum_parser_version" .
+
+dpm:operation_ref a owl:DatatypeProperty ;
+    rdfs:label "operation_ref" ;
+    skos:definition "Reference to the traceability or life-cycle event data within the DP that defines this relationship" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:operation_ref_value" ;
+    dpm:sql_identifier "dpm_operation_ref" .
+
+dpm:parent_schema a owl:DatatypeProperty ;
+    rdfs:label "parent_schema" ;
+    skos:definition "Reference to parent schema if this is nested" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:parent_schema_value" ;
+    dpm:sql_identifier "dpm_parent_schema" .
+
+dpm:record_scope a owl:ObjectProperty ;
+    rdfs:label "record_scope" ;
+    skos:definition "Whether this record describes a product or a material" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_record_scope" .
+
+dpm:related_passport_id a owl:DatatypeProperty ;
+    rdfs:label "related_passport_id" ;
+    skos:definition "Identifier or URL of the related passport record" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:related_passport_id_value" ;
+    dpm:sql_identifier "dpm_related_passport_id" .
+
+dpm:relation_type a owl:ObjectProperty ;
+    rdfs:label "relation_type" ;
+    skos:definition "Type of linkage between this record and the related passport" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:relation_type_value" ;
+    dpm:sql_identifier "dpm_relation_type" .
+
+dpm:schema_hash a owl:DatatypeProperty ;
+    rdfs:label "schema_hash" ;
+    skos:definition "Cryptographic hash/checksum for schema integrity verification" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_hash_value" ;
+    dpm:sql_identifier "dpm_schema_hash" .
+
+dpm:schema_identifier a owl:DatatypeProperty ;
+    rdfs:label "schema_identifier" ;
+    skos:definition "Alternative identifier if URL not available (e.g., URN, DOI, registry ID)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_identifier_value" ;
+    dpm:sql_identifier "dpm_schema_identifier" .
+
+dpm:schema_language a owl:DatatypeProperty ;
+    rdfs:label "schema_language" ;
+    skos:definition "Technical format/language of the schema (LinkML, JSON-Schema, XSD, SHACL, RDF-Schema, OWL, etc.)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_language_value" ;
+    dpm:sql_identifier "dpm_schema_language" .
+
+dpm:schema_namespace a owl:DatatypeProperty ;
+    rdfs:label "schema_namespace" ;
+    skos:definition "Namespace or prefix used for this schema in the record" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_namespace_value" ;
+    dpm:sql_identifier "dpm_schema_namespace" .
+
+dpm:schema_notes a owl:DatatypeProperty ;
+    rdfs:label "schema_notes" ;
+    skos:definition "Additional notes about schema usage or exceptions" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_notes_value" ;
+    dpm:sql_identifier "dpm_schema_notes" .
+
+dpm:schema_profile a owl:DatatypeProperty ;
+    rdfs:label "schema_profile" ;
+    skos:definition "Specific profile or subset of the schema being used" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_profile_value" ;
+    dpm:sql_identifier "dpm_schema_profile" .
+
+dpm:schema_reference a owl:ObjectProperty ;
+    rdfs:label "schema_reference" ;
+    skos:definition "Core reference information for the schema" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_schema_reference" .
+
+dpm:schema_role a owl:DatatypeProperty ;
+    rdfs:label "schema_role" ;
+    skos:definition "Purpose of this schema in the DMP/DPP (core-identity, sustainability-data, regulatory-compliance, usage-tracking, material-identity, material-composition, processing-history, batch-traceability, safety-sheet, recycled-content, etc.)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_role_value" ;
+    dpm:sql_identifier "dpm_schema_role" .
+
+dpm:schema_type a owl:DatatypeProperty ;
+    rdfs:label "schema_type" ;
+    skos:definition "Classification of schema source (CE-RISE, GS1, Schema.org, ISO, custom, etc.)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_type_value" ;
+    dpm:sql_identifier "dpm_schema_type" .
+
+dpm:schema_url a owl:DatatypeProperty ;
+    rdfs:label "schema_url" ;
+    skos:definition "URL or URI identifying the schema" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_url_value" ;
+    dpm:sql_identifier "dpm_schema_url" .
+
+dpm:schema_usage a owl:ObjectProperty ;
+    rdfs:label "schema_usage" ;
+    skos:definition "Context about how this schema is used" ;
+    skos:inScheme dpm: ;
+    dpm:sql_identifier "dpm_schema_usage" .
+
+dpm:schema_version a owl:DatatypeProperty ;
+    rdfs:label "schema_version" ;
+    skos:definition "Version of the referenced schema" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:schema_version_value" ;
+    dpm:sql_identifier "dpm_schema_version" .
+
+dpm:sequence_order a owl:DatatypeProperty ;
+    rdfs:label "sequence_order" ;
+    skos:definition "Position of this schema's data in the composite record (1-based)" ;
+    skos:inScheme dpm: ;
+    dpm:owl.filler "dpm:sequence_order_value" ;
+    dpm:sql_identifier "dpm_sequence_order" .
+
+dpm:PassportRelationTypeEnum a owl:Class ;
+    rdfs:label "PassportRelationTypeEnum" ;
+    owl:unionOf ( <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#derived_from> <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#contributes_to> <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#split_from> <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#merged_into> <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#recycled_into> <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#manufactured_from> ) ;
+    skos:definition "Relationship type between passport records" ;
+    skos:inScheme dpm: ;
+    linkml:permissible_values <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#contributes_to>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#derived_from>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#manufactured_from>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#merged_into>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#recycled_into>,
+        <https://ce-rise-models.codeberg.page/dp-record-metadata/PassportRelationTypeEnum#split_from> .
+
+
