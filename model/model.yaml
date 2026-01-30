@@ -270,6 +270,13 @@ classes:
                 annotations:
                     sql_identifier: dpm_minimum_parser_version
                     owl.filler: dpm:minimum_parser_version_value
+            metadata_language:
+                range: string
+                description: "Language of descriptive text in metadata (ISO 639-1 code)"
+                slot_uri: dcterms:language
+                annotations:
+                    sql_identifier: dpm_metadata_language
+                    owl.filler: dpm:metadata_language_value
 
     RelatedPassport:
         description: "Link to another passport record, optionally tied to a traceability or life-cycle event"
@@ -316,10 +323,3 @@ enums:
                 description: "This record is recycled into the related passport"
             manufactured_from:
                 description: "This record is manufactured from the related passport"
-            metadata_language:
-                range: string
-                description: "Language of descriptive text in metadata (ISO 639-1 code)"
-                slot_uri: dcterms:language
-                annotations:
-                    sql_identifier: dpm_metadata_language
-                    owl.filler: dpm:metadata_language_value
