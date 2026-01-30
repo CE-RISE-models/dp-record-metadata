@@ -1,14 +1,14 @@
-# CE-RISE DPP Record Metadata
+# CE-RISE DMP & DPP Record Metadata
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17880431.svg)](https://doi.org/10.5281/zenodo.17880431) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dpp-record-metadata/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17880431.svg)](https://doi.org/10.5281/zenodo.17880431) [![Schemas](https://img.shields.io/badge/Schema%20Files-LinkML%2C%20JSON%2C%20SHACL%2C%20OWL-32CD32)](https://ce-rise-models.codeberg.page/dp-record-metadata/)
 
-Repository for the CE-RISE DPP Record Metadata data model, part of the DPP Metadata Layer in the Digital Product Passport architecture. This model provides a universal metadata envelope that declares which data models and schemas compose a DPP record, regardless of their origin. It supports any combination of CE-RISE models, industry standards, proprietary schemas, or established ontologies, enabling true interoperability. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DPP record, promoting an open and extensible ecosystem rather than a closed system.
+Repository for the CE-RISE DMP & DPP Record Metadata data model, part of the DMP & DPP Metadata Layer in the Digital Material and Product Passport architecture. This model provides a universal metadata envelope that declares which data models and schemas compose a DMP/DPP record, regardless of their origin. It supports any combination of CE-RISE models, industry standards, proprietary schemas, or established ontologies, enabling true interoperability. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DMP/DPP record, promoting an open and extensible ecosystem rather than a closed system.
 
 
 ---
 
 ## Data Model Structure
-This data model provides a universal metadata framework for declaring the composition of any DPP record. It supports heterogeneous data sources by allowing references to any schema or ontology - whether CE-RISE models, GS1 standards, Schema.org types, industry-specific schemas, or proprietary formats. The metadata declares which models are used and in what sequence, enabling parsers to correctly interpret composite records built from diverse sources.
+This data model provides a universal metadata framework for declaring the composition of any DMP/DPP record. It supports heterogeneous data sources by allowing references to any schema or ontology - whether CE-RISE models, GS1 standards, Schema.org types, industry-specific schemas, or proprietary formats. The metadata declares which models are used and in what sequence, enabling parsers to correctly interpret composite records built from diverse sources.
 
 ### Key Design Principles
 1. **Schema-agnostic**: Supports any data model, ontology, or schema - not limited to CE-RISE
@@ -21,7 +21,12 @@ This data model provides a universal metadata framework for declaring the compos
 ### Core Hierarchy
 
 ```
-DPPRecordMetadata (root)
+DPRecordMetadata (root)
+├── RecordScope (product or material)
+├── RelatedPassports (multivalued)
+│   ├── RelatedPassportId (URI/identifier)
+│   ├── RelationType (derived_from, contributes_to, split_from, merged_into, recycled_into, manufactured_from)
+│   └── OperationRef (link to traceability or life-cycle event)
 ├── AppliedSchemas (multivalued)
 │   ├── SchemaReference
 │   │   ├── SchemaURL
@@ -34,7 +39,7 @@ DPPRecordMetadata (root)
 │   │   ├── SchemaNamespace
 │   │   └── DocumentationURL
 │   ├── SchemaUsage
-│   │   ├── SchemaRole (core-identity, sustainability-data, regulatory-compliance, usage-tracking, etc.)
+│   │   ├── SchemaRole (core-identity, sustainability-data, regulatory-compliance, usage-tracking, material-identity, material-composition, processing-history, batch-traceability, safety-sheet, recycled-content, etc.)
 │   │   ├── SchemaProfile (subset or profile used)
 │   │   ├── DataCompleteness (full, partial, minimal)
 │   │   ├── CompletenessPercentage (0-100)
@@ -72,7 +77,7 @@ Core identification and reference information for each schema:
 
 #### **Step 2: Schema Usage Context**
 Metadata about how each schema is applied in the record:
-- **SchemaRole**: Purpose in the DPP (core-identity, sustainability-data, regulatory-compliance, usage-tracking)
+- **SchemaRole**: Purpose in the DMP/DPP (core-identity, sustainability-data, regulatory-compliance, usage-tracking, material-identity, material-composition, processing-history, batch-traceability, safety-sheet, recycled-content)
 - **SchemaProfile**: Specific profile or subset being used
 - **DataCompleteness**: Categorical completeness (full, partial, minimal)
 - **CompletenessPercentage**: Numeric percentage of populated fields (0-100)
@@ -87,13 +92,19 @@ Metadata about how each schema is applied in the record:
 
 #### **Step 3: Metadata Versioning**
 Version and lifecycle information for the metadata structure itself:
-- **MetadataSchemaVersion**: Version of this DPP Record Metadata schema
+- **MetadataSchemaVersion**: Version of this DMP & DPP Record Metadata schema
 - **CompatibilityLevel**: Backward/forward compatibility (e.g., "compatible-with: 1.x")
 - **MetadataCreated**: Timestamp when metadata was created
 - **MetadataModified**: Last modification timestamp
 - **MetadataSchemaURL**: Reference to this metadata schema definition
 - **MinimumParserVersion**: Required parser version to process
 - **MetadataLanguage**: Language of descriptive text (ISO 639-1)
+
+#### **Step 4: Passport Linkages**
+Optional links to other passport records (product ↔ material relationships):
+- **RelatedPassportId**: Identifier or URL of the related passport
+- **RelationType**: Relationship type (derived_from, contributes_to, split_from, merged_into, recycled_into, manufactured_from)
+- **OperationRef**: Optional reference to a traceability or life-cycle event that defines the linkage
 
 Examples of supported schemas:
 - CE-RISE models (product-profile v1.0, usage-and-maintenance v1.0)
@@ -114,7 +125,7 @@ Every data point in the model includes a `sql_identifier` annotation that serves
 **Pattern**: `dpm_[category]_[specific_name]`
 
 **Features:**
-- **DPP Metadata Prefix**: All identifiers start with `dpm_` to clearly identify them as DPP Record Metadata
+- **DMP & DPP Metadata Prefix**: All identifiers start with `dpm_` to clearly identify them as DMP & DPP Record Metadata
 - **Hierarchical Namespacing**: Uses category prefixes (`schema_`, `version_`)
 - **Database-Friendly**: Uses underscores and avoids special characters for SQL compatibility
 - **Unique Across Model**: No duplicate identifiers within the metadata model
@@ -127,8 +138,12 @@ Every data point in the model includes a `sql_identifier` annotation that serves
 - `dpm_schema_version` - Version of an applied schema
 - `dpm_schema_hash` - Integrity checksum of schema
 - `dpm_schema_order` - Sequence position in composite record
-- `dpm_schema_role` - Purpose of schema in DPP
+- `dpm_schema_role` - Purpose of schema in DMP/DPP
 - `dpm_schema_completeness` - Data coverage level
+- `dpm_record_scope` - Record scope (product or material)
+- `dpm_related_passport_id` - Identifier for a related passport
+- `dpm_relation_type` - Type of relationship to the related passport
+- `dpm_operation_ref` - Reference to a traceability or life-cycle event
 - `dpm_metadata_version` - Version of this metadata schema
 
 This identifier system enables the metadata to be stored alongside product data without naming conflicts.
@@ -162,7 +177,7 @@ This identifier system enables the metadata to be stored alongside product data 
 Release artifacts for each version (`schema.json`, `shacl.ttl`, `model.owl`)  
 are served directly from this URL:
 ```
-https://ce-rise-models.codeberg.page/dpp-record-metadata/
+https://ce-rise-models.codeberg.page/dp-record-metadata/
 ```
 
 
@@ -173,7 +188,7 @@ https://ce-rise-models.codeberg.page/dpp-record-metadata/
 If you want to view the files published for version `v1.2.0`, open:
 
 ```
-https://codeberg.org/CE-RISE-models/dpp-record-metadata/src/tag/pages-v1.2.0/generated/
+https://codeberg.org/CE-RISE-models/dp-record-metadata/src/tag/pages-v1.2.0/generated/
 ```
 
 Files available in that directory typically include:

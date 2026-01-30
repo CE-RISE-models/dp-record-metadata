@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to the CE-RISE DPP Record Metadata Data Model will be documented in this file.
+All notable changes to the CE-RISE DMP & DPP Record Metadata Data Model will be documented in this file.
+
+## [0.0.2] - 2026-01-30
+
+### Added
+- Support for Digital Material Passports alongside Digital Product Passports
+- Record scope field to distinguish product vs material records
+- Expanded schema role examples to include material-specific roles
+- Related passport linkage metadata with optional operation references
 
 ## [0.0.1] - 2025-12-10
 

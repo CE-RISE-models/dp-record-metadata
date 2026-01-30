@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-title: CE-RISE DPP Record Metadata
+title: CE-RISE DMP & DPP Record Metadata
 message: >-
-  v0.0.1 - Initial implementation of DPP Record Metadata model for universal schema composition.
+  v0.0.2 - Added support for Digital Material Passports alongside Digital Product Passports.
 type: software
 doi: 10.5281/zenodo.17880431
 authors:
@@ -14,15 +14,16 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.17880431
     description: This DOI represents all software versions.
-repository-code: 'https://codeberg.org/CE-RISE_models/dpp-record-metadata'
-url: 'https://ce-rise-models.codeberg.page/dpp-record-metadata/'
+repository-code: 'https://codeberg.org/CE-RISE_models/dp-record-metadata'
+url: 'https://ce-rise-models.codeberg.page/dp-record-metadata/'
 abstract: >-
-  This model provides a universal metadata envelope that declares which data models and schemas compose a DPP record, regardless of their origin. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DPP record, promoting an open and extensible ecosystem rather than a closed system.
+  This model provides a universal metadata envelope that declares which data models and schemas compose a DMP/DPP record, regardless of their origin. The metadata acts as a "table of contents" that tells consumers which models to use for interpreting each part of the composite DMP/DPP record, promoting an open and extensible ecosystem rather than a closed system.
 keywords:
   - CE-RISE
   - Data Model
   - Ontology
   - Open Source
   - Open Science
+  - Digital Material Passport
   - Digital Product Passport
 license: CC-BY-NC-4.0
