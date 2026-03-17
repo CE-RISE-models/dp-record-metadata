@@ -1,7 +1,5 @@
 cff-version: 1.2.0
 title: CE-RISE DMP & DPP Record Metadata
-message: >-
-  v0.0.2 - Added support for Digital Material Passports alongside Digital Product Passports.
 type: software
 doi: 10.5281/zenodo.17880431
 authors:
